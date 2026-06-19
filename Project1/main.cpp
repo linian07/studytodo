@@ -37,7 +37,8 @@ int main()
         cout << "1. Add Task" << endl;
         cout << "2. List tasks" << endl;
         cout << "3. Mark task as done" << endl;
-        cout << "4. Exit" << endl;
+        cout << "4. Delete task" << endl;
+        cout << "5. Exit" << endl;
         cout << "Enter your choice: ";
 
         cin >> choice;
@@ -68,6 +69,7 @@ int main()
                 cout << "Total " << tasks.size() << " task(s) in the list" << endl;
             }
         }
+
         else if (choice == 2)
             printTask(tasks);
 
@@ -85,7 +87,22 @@ int main()
                 cout << "Invalid task number." << endl;
             }
         }
-        else if (choice == 4) {
+
+        else if(choice==4) {
+            int tasknum;
+            cout << "Which task do you want to delete? Enter number: ";
+            cin >> tasknum;
+            cin.ignore();
+            if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
+                tasks.erase(tasks.begin() + tasknum - 1);
+                cout << "Task deleted." << endl;
+            }
+            else {
+                cout << "Invalid task number." << endl;
+            }
+        }
+
+        else if (choice == 5) {
             break;
         }
 
