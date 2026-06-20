@@ -9,6 +9,27 @@ struct Task {
     bool done;
 };
 
+
+void printTask(const vector<Task>& tasks) {
+    cout << "My Task List" << endl;
+    if (tasks.empty()) {
+        cout << "No tasks" << endl;
+    }
+    else {
+        for (size_t i = 0; i < tasks.size(); i++) {
+            cout << i + 1 << ". ";
+            if (tasks[i].done) {
+                cout << "[x] ";
+            }
+            else {
+                cout << "[ ] ";
+            }
+            cout << tasks[i].title << endl;
+        }
+    }
+}
+
+
 void saveTasks (const vector<Task>& tasks) {//实现保存数据功能
     ofstream file("tasks.txt");//创建并打开一个文件
 
@@ -42,22 +63,82 @@ void loadTasks(vector<Task>& tasks) {//实现数据恢复
     file.close();
 }
 
-void printTask(const vector<Task>& tasks) {
-    cout << "My Task List" << endl;
-    if (tasks.empty()) {
-        cout << "No tasks" << endl;
+void showMenu() {
+    cout << "1. Add Task" << endl;
+    cout << "2. View Tasks" << endl;
+    cout << "3. Mark Task as Done" << endl;
+    cout << "4. Delete Task" << endl;
+    cout << "5. Save and Exit" << endl;
+    cout << "Enter your choice: ";
+}
+
+void addTask(vector<Task>& tasks) {
+    string newTask;
+    cout << "Please enter a task (enter 'quit' to exit):" << endl;
+
+    while (true) {
+        cout << ">";
+        getline(cin, newTask);
+
+        if (newTask == "quit")
+            break;
+        if (newTask.empty()) {
+            cout << "Task cannot be empty, please re-enter" << endl;
+            continue;
+        }
+
+        Task task;
+        task.title = newTask;
+        task.done = false;
+
+        tasks.push_back(task);//添加任务
+        saveTasks(tasks);
+
+        cout << "Task added: " << newTask << endl;
+        cout << "Total " << tasks.size() << " task(s) in the list" << endl;
+    }
+}
+
+void markTaskDone(vector<Task>& tasks) {
+    int taskNumber;
+
+    printTask(tasks);
+
+    if (tasks.empty())
+        return;
+
+    cout << "Enter the task number to mark as done: ";
+    cin >> taskNumber;
+    cin.ignore();
+
+    if (taskNumber > 0 && taskNumber <= static_cast<int> (tasks.size())) {
+        tasks[taskNumber - 1].done = true;
+        saveTasks(tasks);
+        cout << "Task marked as done." << endl;
     }
     else {
-        for (size_t i = 0; i < tasks.size(); i++) {
-            cout << i + 1 << ". " ;
-            if (tasks[i].done){
-                cout << "[x] ";
-            }
-            else {
-                cout<<"[ ] ";
-            }
-            cout << tasks[i].title << endl;
-        }
+        cout << "Invalid task number." << endl;
+    }
+}
+
+void deleteTask(vector<Task>& tasks) {
+    printTask(tasks);
+
+    if (tasks.empty())
+        return;
+
+    int tasknum;
+    cout << "Which task do you want to delete? Enter number: ";
+    cin >> tasknum;
+    cin.ignore();
+
+    if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
+        tasks.erase(tasks.begin() + tasknum - 1);//删除任务
+        saveTasks(tasks);
+        cout << "Task deleted." << endl;
+    }
+    else {
+        cout << "Invalid task number." << endl;
     }
 }
 
@@ -69,76 +150,24 @@ int main()
     int choice;
 
     while(true) {
-        cout << "Study Todo" << endl;
-        cout << "1. Add Task" << endl;
-        cout << "2. List tasks" << endl;
-        cout << "3. Mark task as done" << endl;
-        cout << "4. Delete task" << endl;
-        cout << "5. Exit" << endl;
-        cout << "Enter your choice: ";
+        showMenu();
 
         cin >> choice;
         cin.ignore();
         
         if (choice == 1) {
-            string newTask;
-            cout << "Please enter a task (enter 'quit' to exit):" << endl;
-
-            while (true) {
-                cout << ">";
-                getline(cin, newTask);
-
-                if (newTask == "quit")
-                    break;
-                if (newTask.empty()) {
-                    cout << "Task cannot be empty, please re-enter" << endl;
-                    continue;
-                }
-
-                Task task;
-                task.title = newTask;
-                task.done = false;
-
-                tasks.push_back(task);//添加任务
-                saveTasks(tasks);
-
-                cout << "Task added: " << newTask << endl;
-                cout << "Total " << tasks.size() << " task(s) in the list" << endl;
-            }
+            addTask(tasks);
         }
 
         else if (choice == 2)
             printTask(tasks);
 
         else if (choice == 3) {
-            int tasknum;
-            cout << "Which task did you finish? Enter number: ";
-            cin >> tasknum;
-            cin.ignore();
-
-            if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
-                tasks[tasknum - 1].done = true;//标记任务完成
-                saveTasks(tasks);
-                cout << "Task marked as done." << endl;
-            }
-            else {
-                cout << "Invalid task number." << endl;
-            }
+            markTaskDone(tasks);
         }
 
         else if(choice==4) {
-            int tasknum;
-            cout << "Which task do you want to delete? Enter number: ";
-            cin >> tasknum;
-            cin.ignore();
-            if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
-                tasks.erase(tasks.begin() + tasknum - 1);//删除任务
-                saveTasks(tasks);
-                cout << "Task deleted." << endl;
-            }
-            else {
-                cout << "Invalid task number." << endl;
-            }
+            deleteTask(tasks);
         }
 
         else if (choice == 5) {
