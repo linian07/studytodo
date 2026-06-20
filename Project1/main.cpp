@@ -1,12 +1,46 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<fstream>
 using namespace std;
 
 struct Task {
     string title;
     bool done;
 };
+
+void saveTasks (const vector<Task>& tasks) {
+    ofstream file("tasks.txt");//创建并打开一个文件
+
+    for (size_t i = 0;i < tasks.size();i++) {
+        file << tasks[i].done << "|" << tasks[i].title << endl;//传入数据
+    }
+    file.close();//关闭文件
+}
+
+void loadTasks(vector<Task>& tasks) {
+    ifstream file("tasks.txt");
+        
+    if (!file)//检查文件是否打开或者存在
+        return;
+
+    string line;
+
+    while (getline(file, line)) {//逐行读取文件内容
+        size_t separator = line.find('|');//找到分隔符的位置
+
+        if (separator == string::npos)
+            continue;
+
+        Task task;
+        task.done = (line.substr(0, separator) == "1");
+        task.title = line.substr(separator + 1);
+
+        tasks.push_back(task);
+    }
+
+    file.close();
+}
 
 void printTask(const vector<Task>& tasks) {
     cout << "My Task List" << endl;
@@ -30,6 +64,8 @@ void printTask(const vector<Task>& tasks) {
 int main()
 {
     vector<Task>tasks;
+    loadTasks(tasks);
+
     int choice;
 
     while(true) {
@@ -103,6 +139,8 @@ int main()
         }
 
         else if (choice == 5) {
+            saveTasks(tasks);
+            cout << "Tasks saved. Goodbye!" << endl;
             break;
         }
 
