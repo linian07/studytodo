@@ -9,7 +9,7 @@ struct Task {
     bool done;
 };
 
-void saveTasks (const vector<Task>& tasks) {
+void saveTasks (const vector<Task>& tasks) {//实现保存数据功能
     ofstream file("tasks.txt");//创建并打开一个文件
 
     for (size_t i = 0;i < tasks.size();i++) {
@@ -18,7 +18,7 @@ void saveTasks (const vector<Task>& tasks) {
     file.close();//关闭文件
 }
 
-void loadTasks(vector<Task>& tasks) {
+void loadTasks(vector<Task>& tasks) {//实现数据恢复
     ifstream file("tasks.txt");
         
     if (!file)//检查文件是否打开或者存在
@@ -29,14 +29,14 @@ void loadTasks(vector<Task>& tasks) {
     while (getline(file, line)) {//逐行读取文件内容
         size_t separator = line.find('|');//找到分隔符的位置
 
-        if (separator == string::npos)
+        if (separator == string::npos)//没有找到就跳过
             continue;
 
         Task task;
         task.done = (line.substr(0, separator) == "1");
         task.title = line.substr(separator + 1);
 
-        tasks.push_back(task);
+        tasks.push_back(task);//实现恢复数据
     }
 
     file.close();
@@ -99,7 +99,8 @@ int main()
                 task.title = newTask;
                 task.done = false;
 
-                tasks.push_back(task);
+                tasks.push_back(task);//添加任务
+                saveTasks(tasks);
 
                 cout << "Task added: " << newTask << endl;
                 cout << "Total " << tasks.size() << " task(s) in the list" << endl;
@@ -116,7 +117,8 @@ int main()
             cin.ignore();
 
             if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
-                tasks[tasknum - 1].done = true;
+                tasks[tasknum - 1].done = true;//标记任务完成
+                saveTasks(tasks);
                 cout << "Task marked as done." << endl;
             }
             else {
@@ -130,7 +132,8 @@ int main()
             cin >> tasknum;
             cin.ignore();
             if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
-                tasks.erase(tasks.begin() + tasknum - 1);
+                tasks.erase(tasks.begin() + tasknum - 1);//删除任务
+                saveTasks(tasks);
                 cout << "Task deleted." << endl;
             }
             else {
