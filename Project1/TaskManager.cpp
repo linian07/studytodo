@@ -6,7 +6,7 @@
 #include <string>
 using namespace std;
 
-void saveTasks(const vector<Task>& tasks) {//实现保存数据功能
+void  TaskManager :: saveTasks() const {//实现保存数据功能
     ofstream file("tasks.txt");//创建并打开一个文件
 
     for (size_t i = 0;i < tasks.size();i++) {
@@ -15,7 +15,7 @@ void saveTasks(const vector<Task>& tasks) {//实现保存数据功能
     file.close();//关闭文件
 }
 
-void loadTasks(vector<Task>& tasks) {//实现数据恢复
+void  TaskManager ::loadTasks() {//实现数据恢复
     ifstream file("tasks.txt");
 
     if (!file)//检查文件是否打开或者存在
@@ -39,14 +39,16 @@ void loadTasks(vector<Task>& tasks) {//实现数据恢复
     file.close();
 }
 
-void printTask(const vector<Task>& tasks) {
+void TaskManager :: printTask() const {
     cout << "My Task List" << endl;
+
     if (tasks.empty()) {
         cout << "No tasks" << endl;
     }
     else {
         for (size_t i = 0; i < tasks.size(); i++) {
             cout << i + 1 << ". ";
+
             if (tasks[i].done) {
                 cout << "[x] ";
             }
@@ -85,7 +87,7 @@ int getMenuChoice() {
     }
 }
 
-void addTask(vector<Task>& tasks) {
+void  TaskManager :: addTask() {
     string newTask;
     cout << "Please enter a task (enter 'quit' to exit):" << endl;
 
@@ -105,17 +107,17 @@ void addTask(vector<Task>& tasks) {
         task.done = false;
 
         tasks.push_back(task);//添加任务
-        saveTasks(tasks);
+        saveTasks ();
 
         cout << "Task added: " << newTask << endl;
         cout << "Total " << tasks.size() << " task(s) in the list" << endl;
     }
 }
 
-void markTaskDone(vector<Task>& tasks) {
+void  TaskManager :: markTaskDone() {
     int taskNumber;
 
-    printTask(tasks);
+    printTask();
 
     if (tasks.empty())
         return;
@@ -126,7 +128,7 @@ void markTaskDone(vector<Task>& tasks) {
 
     if (taskNumber > 0 && taskNumber <= static_cast<int> (tasks.size())) {
         tasks[taskNumber - 1].done = true;
-        saveTasks(tasks);
+        saveTasks();
         cout << "Task marked as done." << endl;
     }
     else {
@@ -134,8 +136,8 @@ void markTaskDone(vector<Task>& tasks) {
     }
 }
 
-void deleteTask(vector<Task>& tasks) {
-    printTask(tasks);
+void  TaskManager:: deleteTask() {
+    printTask();
 
     if (tasks.empty())
         return;
@@ -147,7 +149,7 @@ void deleteTask(vector<Task>& tasks) {
 
     if (tasknum >= 1 && tasknum <= static_cast<int>(tasks.size())) {
         tasks.erase(tasks.begin() + tasknum - 1);//删除任务
-        saveTasks(tasks);
+        saveTasks();
         cout << "Task deleted." << endl;
     }
     else {

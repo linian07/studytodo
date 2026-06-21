@@ -6,8 +6,8 @@ using namespace std;
 
 int main()
 {
-    vector<Task>tasks;
-    loadTasks(tasks);
+    TaskManager manager;
+    manager.loadTasks();
 
     int choice;
 
@@ -15,22 +15,22 @@ int main()
         choice = getMenuChoice();
         
         if (choice == 1) {
-            addTask(tasks);
+            manager.addTask();
         }
 
         else if (choice == 2)
-            printTask(tasks);
+            manager.printTask();
 
         else if (choice == 3) {
-            markTaskDone(tasks);
+            manager.markTaskDone();
         }
 
         else if(choice==4) {
-            deleteTask(tasks);
+            manager.deleteTask();
         }
 
         else if (choice == 5) {
-            saveTasks(tasks);
+            manager.saveTasks();
             cout << "Tasks saved. Goodbye!" << endl;
             break;
         }
