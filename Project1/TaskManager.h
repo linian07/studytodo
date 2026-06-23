@@ -15,6 +15,3 @@ public:
 	void markTaskDone();
 	void deleteTask();
 };
-
-void showMenu();
-int getMenuChoice();
