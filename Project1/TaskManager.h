@@ -11,6 +11,7 @@ public:
 	void loadTasks();
 	void saveTasks() const;
 	void printTask() const;
+	void printTasksByPriority() const;
 	void addTask();
 	void markTaskDone();
 	void deleteTask();

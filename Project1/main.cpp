@@ -23,14 +23,18 @@ int main()
             manager.printTask();
 
         else if (choice == 3) {
+            manager.printTasksByPriority();
+        }
+
+        else if (choice == 4) {
             manager.markTaskDone();
         }
 
-        else if(choice==4) {
+        else if(choice==5) {
             manager.deleteTask();
         }
 
-        else if (choice == 5) {
+        else if (choice == 6) {
             manager.saveTasks();
             cout << "Tasks saved. Goodbye!" << endl;
             break;

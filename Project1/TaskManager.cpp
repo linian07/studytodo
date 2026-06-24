@@ -4,6 +4,7 @@
 #include <fstream>
 #include <limits>
 #include <string>
+#include<algorithm>
 using namespace std;
 
 void  TaskManager :: saveTasks() const {//实现保存数据功能
@@ -48,7 +49,6 @@ void  TaskManager ::loadTasks() {//实现数据恢复
     file.close();
 }
 
-
 string priorityToText(int priority) {
     if (priority == 1) {
         return "Low";
@@ -63,7 +63,6 @@ string priorityToText(int priority) {
         return "Unknown";
     }
 }
-
 
 void TaskManager :: printTask() const {
     cout << "My Task List" << endl;
@@ -84,6 +83,35 @@ void TaskManager :: printTask() const {
             cout << "[" << priorityToText(tasks[i].priority) << "]";
             cout<<tasks[i].title << endl;
         }
+    }
+}
+
+void TaskManager::printTasksByPriority() const {
+    cout << "My Task List By Priority" << endl;
+
+    if (tasks.empty()) {
+        cout << "No tasks" << endl;
+        return;
+    }
+
+    vector<Task> sortedTasks = tasks;
+
+    sort(sortedTasks.begin(), sortedTasks.end(), [](const Task& a, const Task& b) {
+        return a.priority > b.priority;
+        });
+
+    for (size_t i = 0; i < sortedTasks.size(); i++) {
+        cout << i + 1 << ". ";
+
+        if (sortedTasks[i].done) {
+            cout << "[x] ";
+        }
+        else {
+            cout << "[ ] ";
+        }
+
+        cout << "[" << priorityToText(sortedTasks[i].priority) << "] ";
+        cout << sortedTasks[i].title << endl;
     }
 }
 
