@@ -10,7 +10,7 @@ void  TaskManager :: saveTasks() const {//实现保存数据功能
     ofstream file("tasks.txt");//创建并打开一个文件
 
     for (size_t i = 0;i < tasks.size();i++) {
-        file << tasks[i].done << "|" << tasks[i].title << endl;//传入数据
+        file << tasks[i].done << "|" <<tasks[i].priority<<"|" << tasks[i].title << endl;//传入数据
     }
     file.close();//关闭文件
 }
@@ -24,20 +24,46 @@ void  TaskManager ::loadTasks() {//实现数据恢复
     string line;
 
     while (getline(file, line)) {//逐行读取文件内容
-        size_t separator = line.find('|');//找到分隔符的位置
+        size_t firstseparator = line.find('|');//找到分隔符的位置
 
-        if (separator == string::npos)//没有找到就跳过
+        if (firstseparator == string::npos)//没有找到就跳过
             continue;
 
-        Task task;
-        task.done = (line.substr(0, separator) == "1");
-        task.title = line.substr(separator + 1);
+        size_t secondseparator = line.find('|', firstseparator + 1);
 
+        Task task;
+        if (secondseparator == string::npos){
+            task.done = (line.substr(0,firstseparator) == "1");
+            task.priority = 2;
+            task.title = line.substr(secondseparator + 1);
+        }
+        else {
+            task.done = (line.substr(0, firstseparator) == "1");
+            task.priority = stoi(line.substr(firstseparator + 1, secondseparator - firstseparator - 1));
+            task.title = line.substr(secondseparator + 1);
+        }
         tasks.push_back(task);//实现恢复数据
     }
 
     file.close();
 }
+
+
+string priorityToText(int priority) {
+    if (priority == 1) {
+        return "Low";
+    }
+    else if (priority == 2) {
+        return "Medium";
+    }
+    else if (priority == 3) {
+        return "High";
+    }
+    else {
+        return "Unknown";
+    }
+}
+
 
 void TaskManager :: printTask() const {
     cout << "My Task List" << endl;
@@ -55,7 +81,8 @@ void TaskManager :: printTask() const {
             else {
                 cout << "[ ] ";
             }
-            cout << tasks[i].title << endl;
+            cout << "[" << priorityToText(tasks[i].priority) << "]";
+            cout<<tasks[i].title << endl;
         }
     }
 }
@@ -75,9 +102,20 @@ void  TaskManager :: addTask() {
             continue;
         }
 
+        int priority;
+
+        cout<<"Enter priority (1: Low, 2: Medium, 3: High): ";
+        cin>> priority;
+        cin.ignore();
+        if (priority < 1 || priority>3) {
+            cout << "Invalid priority. Set to Medium by default" << endl;
+            priority = 2;
+        }
+
         Task task;
         task.title = newTask;
         task.done = false;
+        task.priority = priority;
 
         tasks.push_back(task);//添加任务
         saveTasks ();
