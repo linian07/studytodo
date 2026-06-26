@@ -1,0 +1,30 @@
+# Build files
+*.exe
+*.o
+*.obj
+*.out
+*.dll
+*.pdb
+build/
+Build/
+cmake-build-*/
+Debug/
+Release/
+x64/
+Win32/
+
+# User data
+tasks.txt
+
+# IDE / editor files
+.vscode/
+.vs/
+.idea/
+*.user
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# OS files
+.DS_Store
+Thumbs.db
