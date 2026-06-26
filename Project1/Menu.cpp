@@ -9,9 +9,10 @@ using namespace std;
 void showMenu() {
     cout << "1. Add Task" << endl;
     cout << "2. View Tasks" << endl;
-    cout << "3. Mark Task as Done" << endl;
-    cout << "4. Delete Task" << endl;
-    cout << "5. Save and Exit" << endl;
+    cout << "3. View Tasks By Priority" << endl;
+    cout << "4. Mark Task as Done" << endl;
+    cout << "5. Delete Task" << endl;
+    cout << "6. Save and Exit" << endl;
     cout << "Enter your choice: ";
 }
 
